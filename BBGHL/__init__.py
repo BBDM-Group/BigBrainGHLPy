@@ -1,1 +1,1 @@
-from GHL.ghlFunctions import GHLPy
+from BBGHL.ghlFunctions import GHL
