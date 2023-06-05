@@ -312,7 +312,7 @@ class GHL:
             return e 
 
     
-    def get_contacts(self, after: Optional[Union[int, datetime]], after_id: Optional[str]):
+    def get_contacts(self, after: Optional[Union[int, datetime]] = None, after_id: Optional[str] = None):
         '''
         Get all contacts
         :param after: - timestamp or datetime 
@@ -367,7 +367,7 @@ class GHL:
         except Exception as e:
             return e
         
-    def get_opportunitiesByPipelline(self, pipeline_id: str, after: Optional[Union[int, datetime]], after_id: Optional[str]):
+    def get_opportunitiesByPipelline(self, pipeline_id: str, after: Optional[Union[int, datetime]] = None, after_id: Optional[str] = None):
         '''
         Get all opportunities for a pipeline 
         :param pipeline_id: - ID of the pipeline
