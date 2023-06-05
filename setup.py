@@ -7,21 +7,21 @@ here = os.path.abspath(os.path.dirname(__file__))
 with codecs.open(os.path.join(here, "README.md"), encoding="utf-8") as fh:
     long_description = "\n" + fh.read()
 
-VERSION = '0.0.3'
-DESCRIPTION = 'A basic python wrapper for gohighlevel'
+VERSION = '0.0.4'
+DESCRIPTION = 'A basic python wrapper for GoHighLevel'
 
 
 # Setting up
 setup(
-    name="GHLPy",
+    name="BigBrainGHLPy",
     version=VERSION,
-    author="Nyzex",
-    author_email="<nyrize025@gmail.com>",
+    author="xtrakTD",
+    author_email="<dmitry.m@bbdmgroup.com>",
     description=DESCRIPTION,
     long_description_content_type="text/markdown",
     long_description=long_description,
     packages=find_packages(),
-    install_requires=['requests','python-dateutil'],
+    install_requires=['GHLPy'],
     keywords=['python', 'ghl', 'gohighlevel', 'api','wrapper'],
     classifiers=[
         "Development Status :: 1 - Planning",

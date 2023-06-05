@@ -5,11 +5,12 @@ Based on: https://public-api.gohighlevel.com/
 
 """
 
-__author__="Nyzex"
+__author__="xtrakTD"
 __status__ = "ongoing"
 
 
 import requests 
+from typing import Union, Optional
 from datetime import datetime
 from dateutil.tz import tzutc
 import json 
@@ -20,20 +21,6 @@ class GHLPy:
     
     """
     Class for GHL wrapper 
-    
-
-
-    Available methods
-    -----------------
-    'add_contactTag', 'bookAppointment', 'contact_appointments', 'create_contactByName', 'delete_appointmentById', 'endpoint', 'get_appointmentById', 'get_calendarBookedSlots', 'get_calendarFreeSlots', 'get_calendars', 'headers', 'lookup_contactByEmail', 'lookup_contactById', 'remove_contactTag', 'token', 'update_appointmentById', 'update_appointmentStatusById'
-
-    For simple and basic use of the GHL v1 api without having to write the payload multiple times,and simple call and execute.
-    
-    The Public V1 API is to be used for extensive usage, thisis just for simple use.
-    
-    
-    
-    Status: Ongoing
     """
 
 
@@ -325,3 +312,96 @@ class GHLPy:
             return e 
 
     
+    def get_contacts(self, after: Optional[Union[int, datetime]], after_id: Optional[str]):
+        '''
+        Get all contacts
+        :param after: - timestamp or datetime 
+        :param after_id: - str Contact ID 
+        :return: - list of GHL contacts. if no params are present - all contacts will be pulled
+        '''
+
+        url = self.endpoint+f"/contacts/"
+        params = {
+            "limit": 100,
+        }
+
+        if after_id:
+            params['startAfterId'] = after_id
+        if after:
+            if isinstance(after, int):
+                params['startAfter'] = after * 1000
+            elif isinstance(after, datetime):
+                params['startAfter'] = datetime.timestamp(after) * 1000
+        
+        _contacts = []
+
+        try:
+            response = requests.request(method='GET', url=url, headers=self.headers, params=params)
+            _contacts.extend(response.json().get('contacts'))
+            
+            if response.json().get('meta', {}).get('nextPageUrl', None) is not None:
+                while response.json().get('meta', {}).get('nextPageUrl', None) is not None:
+                    response = requests.request(method='GET', url=response.json()['meta']['nextPageUrl'], headers=self.headers)
+                    _contacts.extend(response.json().get('contacts'))
+            return _contacts
+        except Exception as e:
+            return e
+
+
+    '''
+    Opportunities
+    '''
+
+
+    def get_pipelines(self, id_only: bool = False):
+        '''
+        Get all pipelines
+        :param id_only: - bool if set only pipeline ID is returned
+        '''
+
+        url = self.endpoint+f'/pipelines/'
+
+        try:
+            response = requests.request(method='GET', url=url, headers=self.headers)
+            return response.json() if not id_only else [x.get('id') for x in response.json().get('pipelines', {})]
+        except Exception as e:
+            return e
+        
+    def get_opportunitiesByPipelline(self, pipeline_id: str, after: Optional[Union[int, datetime]], after_id: Optional[str]):
+        '''
+        Get all opportunities for a pipeline 
+        :param pipeline_id: - ID of the pipeline
+        :param after: - timestamp or datetime 
+        :param after_id: - str Opportunity ID 
+        '''
+
+        url = self.endpoint+f'/pipelines/{pipeline_id}/opportunities/'
+
+        params = {
+            "limit": 100,
+        }
+
+        if after_id:
+            params['startAfterId'] = after_id
+        if after:
+            if isinstance(after, int):
+                params['startAfter'] = after * 1000
+            elif isinstance(after, datetime):
+                params['startAfter'] = datetime.timestamp(after) * 1000
+        
+        _opportunities = []
+
+        try:
+            response = requests.request(method='GET', url=url, headers=self.headers, params=params)
+            _opportunities.extend(response.json().get('opportunities'))
+            
+            if response.json().get('meta', {}).get('nextPageUrl', None) is not None:
+                while response.json().get('meta', {}).get('nextPageUrl', None) is not None:
+                    response = requests.request(method='GET', url=response.json()['meta']['nextPageUrl'], headers=self.headers)
+                    _opportunities.extend(response.json().get('opportunities'))
+            return _opportunities
+        except Exception as e:
+            return e
+
+            
+
