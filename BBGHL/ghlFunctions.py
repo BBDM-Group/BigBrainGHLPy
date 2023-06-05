@@ -17,7 +17,7 @@ import json
 
 
 
-class GHLPy:
+class GHL:
     
     """
     Class for GHL wrapper 
