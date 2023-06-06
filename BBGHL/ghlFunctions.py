@@ -403,5 +403,20 @@ class GHL:
         except Exception as e:
             return e
 
-            
+    '''
+    Users
+    '''
 
+    def get_staffUsers(self):
+        '''
+        Get all staff users
+        '''
+
+        url = self.endpoint+f'/users/'
+
+        try:
+            response = requests.request(method='GET', url=url, headers=self.headers)
+            return response.json()
+        except Exception as e:
+            return e
+    
