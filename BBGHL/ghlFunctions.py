@@ -30,7 +30,7 @@ class GHL:
         self.endpoint = "https://rest.gohighlevel.com/v1"
         self.headers = headers = {'Content-Type': 'application/json', 'Authorization': 'Bearer {}'.format(self.token)}
     
-    
+     
     '''
     Calendar Endpoints + Appointments + Contacts
     '''
@@ -275,6 +275,31 @@ class GHL:
             return response.json() 
         except Exception as e:
             return e 
+        
+
+    def contact_tasks(self, contactId):
+        '''
+        Get contact's tasks
+        '''
+        url = self.endpoint+f"/contacts/{contactId}/tasks/"
+        try:
+            response = requests.request("GET", url, headers=self.headers)
+            return response.json() 
+        except Exception as e:
+            return e 
+        
+
+    def get_taskById(self, contactId, taskId):
+        '''
+        Get single task details
+        '''
+        url = self.endpoint+f"/contacts/{contactId}/tasks/{taskId}"
+        try:
+            response = requests.request("GET", url, headers=self.headers)
+            return response.json()
+        except Exception as e:
+            return e
+
     
     
     def add_contactTag(self,contactId,tag):
