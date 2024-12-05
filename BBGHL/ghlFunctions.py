@@ -366,7 +366,8 @@ class GHL:
             
             if response.json().get('meta', {}).get('nextPageUrl', None) is not None:
                 while response.json().get('meta', {}).get('nextPageUrl', None) is not None:
-                    response = requests.request(method='GET', url=response.json()['meta']['nextPageUrl'], headers=self.headers)
+                    _url = (response.json()['meta']['nextPageUrl']).replace('http:', 'https:')
+                    response = requests.request(method='GET', url=_url, headers=self.headers)
                     _contacts.extend(response.json().get('contacts'))
             return _contacts
         except Exception as e:
@@ -422,7 +423,8 @@ class GHL:
             
             if response.json().get('meta', {}).get('nextPageUrl', None) is not None:
                 while response.json().get('meta', {}).get('nextPageUrl', None) is not None:
-                    response = requests.request(method='GET', url=response.json()['meta']['nextPageUrl'], headers=self.headers)
+                    _url = (response.json()['meta']['nextPageUrl']).replace('http:', 'https:')
+                    response = requests.request(method='GET', url=_url, headers=self.headers)
                     _opportunities.extend(response.json().get('opportunities'))
             return _opportunities
         except Exception as e:
